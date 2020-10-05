@@ -1,7 +1,3 @@
-//
-// Created by shahar on 27/09/2020.
-//
-
 #ifndef MEM_EDITOR_NETWORKING_H
 #define MEM_EDITOR_NETWORKING_H
 

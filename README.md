@@ -1,86 +1,72 @@
-# Protocol
-This is how a "Session" goes:
-* First the binary tries to connect to the python
+# Remote Memory Editor
+This project is for editing parts of memory for debugging/researching remotely.
 
-* Then it sends out the process list like this:
+Mainly for debugging on very old/hard to use systems where working on them is not an option.
 
-```
-[4 byte length of pid][pid in char]
-```
-```
-[4 byte length of cmdline][cmdline]
-```
-Until a message is sent with an empty pid so like this:
-```
-00 00 00 00
-```
+It has two key components, executable which is the C code and python which controls the executable.
 
-* Then the client has 2 options, either send the letter 'r'
-which will send the ps again
-or you can send the pid which will select that process and attach to it
+## Usage
 
-This is how you send r to repeat the process list 
-```
-[4 byte length of r]r
-```
+### Python
 
-This is how you attach to a pid
-```
-[4 byte length of pid][pid in char]
-```
-
-It will reply with an error message
-```
-[4 byte length of error message][error message]
-```
-If it comes as 0 length then there was no error
-
-### Process attached
-* Now it sends you the /proc/pid/maps as so:
-```
-[4 byte length of map entry][map entry]
-```
-
-Until an empty message comes
-```
-00 00 00 00 
-```
-
-* Now you can send either 'r' to repeat the proc maps or send 'i' to get memory dumps of given addresses
-or 'w' to write to specific addresses
-
-It will reply with an error message
-```
-[4 byte length of error message][error message]
-```
-If it comes as 0 length then there was no error
-
-
-### Reading
-```
-[4 byte length of i]i
-``` 
-
-It will reply with an error message
-```
-[4 byte length of error message][error message]
-```
-If it comes as 0 length then there was no error
-
-then you give it an address and length and it will read the buffer and send it back
-```
-[4 byte length of start address]address
-```
+Use ipython for this to be much easier to use
 
 ```
-[4 byte length of read length]length
+import mem_editor
 ```
 
-It will reply with an error message
+Then create a server object as so:
 ```
-[4 byte length of error message][error message]
+s = mem_editor.server(LISTEN_IP, LISTEN_PORT)
 ```
 
+And make it start listening
 ```
-[4 byte length of buffer][memory buffer]
+s.wait_for_connection()
 ```
+
+Next you can use the following commands:
+
+#### Commands
+
+##### Process list
+
+Use 
+```
+s.ps()
+```
+
+This will return an array with
+```
+(PID,Process name)
+```
+
+##### Attach
+
+Use
+```
+s.attach(PID)
+```
+
+This will return an error code, 0 if it succeeded
+
+##### Show procmaps
+
+Use 
+```
+s.proc_maps()
+```
+
+This will return an array with a ProcMapEntry object
+
+##### Read memory
+
+Use
+```
+s.read_mem(PID, START_ADDRESS, LENGTH)
+```
+This will read /proc/PID/mem in the given address.
+May need to attach for it to work on older kernels.
+
+This will return a MemoryChunk object
+
