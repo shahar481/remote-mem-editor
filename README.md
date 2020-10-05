@@ -1,4 +1,4 @@
-# Remote Memory Editor
+# WIP: Remote Memory Editor
 This project is for editing parts of memory for debugging/researching remotely.
 
 Mainly for debugging on very old/hard to use systems where working on them is not an option.
