@@ -1,0 +1,1 @@
+from messages.start_command.start_command import StartCommandMessage
