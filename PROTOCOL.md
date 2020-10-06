@@ -41,6 +41,16 @@ Comnands are run as so:
 [4 bytes of length][start command byte][command type byte][command]
 ```
 
+#### Command Data
+
+This is for data returning from the executable or extra data sent for the command.
+Basically any data that is not in the initial start command message.
+
+Structure:
+```
+[4 bytes of length][command data byte][command type byte][command]
+```
+
 ### Commands
 ```
 01 - Ps
