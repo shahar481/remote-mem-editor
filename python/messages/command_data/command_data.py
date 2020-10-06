@@ -20,12 +20,12 @@ class CommandDataMessage(BaseMessage):
         if message is None and (command_type is None or command_data is None):
             raise InvalidParameters()
         if command_type is not None and command_data is not None:
-            message = struct.pack("B") + command_data
+            message = struct.pack("B", command_type) + command_data.encode()
         super().__init__(MESSAGE_TYPE, message)
 
     @property
     def command_type(self):
-        return struct.unpack("B", self.message[COMMAND_TYPE_LOCATION])
+        return self.message[COMMAND_TYPE_LOCATION]
 
     @property
     def command_data(self):
