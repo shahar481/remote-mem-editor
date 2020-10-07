@@ -28,7 +28,7 @@ class MemEditor(object):
         """
         Receives the supported commands from client
         """
-        self._connection.
+        pass
 
 
 
