@@ -1,7 +1,7 @@
 import struct
 
 
-from exceptions import InvalidParameters
+from exceptions import InvalidParameters, CommandTypesDontMatch
 from messages.base import BaseMessage
 
 
@@ -20,7 +20,9 @@ class CommandDataMessage(BaseMessage):
         if message is None and (command_type is None or command_data is None):
             raise InvalidParameters()
         if command_type is not None and command_data is not None:
-            message = struct.pack("B", command_type) + command_data.encode()
+            if isinstance(command_data, str):
+                command_data = command_data.encode()
+            message = struct.pack("B", command_type) + command_data
         super().__init__(MESSAGE_TYPE, message)
 
     @property
@@ -30,3 +32,9 @@ class CommandDataMessage(BaseMessage):
     @property
     def command_data(self):
         return self.message[COMMAND_TYPE_LOCATION + 1:]
+
+    def __add__(self, other):
+        if self.command_type != other.command_type:
+            raise CommandTypesDontMatch()
+        combined_message = self.command_data + other.command_data
+        return CommandDataMessage(command_type=self.command_type, command_data=combined_message)

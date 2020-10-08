@@ -41,6 +41,7 @@ Comnands are run as so:
 [4 bytes of length][start command byte][command type byte][command]
 ```
 
+
 #### Command Data
 
 This is for data returning from the executable or extra data sent for the command.
@@ -50,6 +51,8 @@ Structure:
 ```
 [4 bytes of length][command data byte][command type byte][command]
 ```
+
+After all commands the executable will send an empty error message when it's done sending back data
 
 ### Commands
 ```
@@ -65,4 +68,10 @@ Structure:
 Will run a process list, command needs no data
 ```
 [4 bytes of length][start command byte][ps type byte]
+```
+
+The executable will return a stream of commanddata with null bytes between pids,cmdline and other processes
+As so:
+```
+1234\x00/bin/bash\x001324\x00ps\x00
 ```

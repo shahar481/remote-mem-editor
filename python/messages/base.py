@@ -8,4 +8,4 @@ class BaseMessage(ABC):
 
     def __init__(self, message_type, message):
         self.message_type = message_type
-        self.message = message
+        self.message = bytes(message)

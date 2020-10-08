@@ -8,3 +8,15 @@ class ErrorMessageReceived(Exception):
 
 class InvalidParameters(Exception):
     pass
+
+
+class UnexpectedMessageType(Exception):
+    pass
+
+
+class SessionNotStarted(Exception):
+    pass
+
+
+class CommandTypesDontMatch(Exception):
+    pass
