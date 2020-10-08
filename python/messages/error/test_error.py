@@ -10,3 +10,5 @@ def test_error_message():
     """
     with pytest.raises(ErrorMessageReceived):
         ErrorMessage("This is an error message")
+    # Should not raise an exception
+    ErrorMessage("")

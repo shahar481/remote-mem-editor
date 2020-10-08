@@ -15,6 +15,9 @@ class Networking(object):
         self._connection_sock = None
         self._init_sock()
 
+    def is_connected(self):
+        return self._connection_sock is not None
+
     def _init_sock(self):
         self._listen_sock.bind((self.listen_ip, self.listen_port))
         self._listen_sock.listen(1)
@@ -32,4 +35,18 @@ class Networking(object):
             temp_buff = self._connection_sock.recv(RECV_SIZE)
             received_buff += temp_buff
         return parse_message(received_buff)
+
+    def send_message(self, message):
+        header = struct.pack("!IB", len(message.message) + 1, message.message_type)
+        self._connection_sock.send(header + message)
+
+    def send_and_wait_for_ack(self, message):
+        """
+        Sends a message and waits for a message to come back
+        :param message: Message to send
+        :return: Received message
+        """
+        self.send_message(message)
+        return self.recv_message()
+
 

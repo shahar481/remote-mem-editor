@@ -18,7 +18,9 @@ class StartCommandMessage(BaseMessage):
         if message is None and (command_type is None or command_data is None):
             raise InvalidParameters()
         if command_type is not None and command_data is not None:
-            message = struct.pack("B", command_type) + command_data.encode()
+            if isinstance(command_data, str):
+                command_data = command_data.encode()
+            message = struct.pack("B", command_type) + command_data
         super().__init__(MESSAGE_TYPE, message)
 
     @property

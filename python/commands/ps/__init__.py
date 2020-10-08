@@ -1,2 +1,2 @@
-from commands.ps import *
+from commands.ps.ps import *
 
